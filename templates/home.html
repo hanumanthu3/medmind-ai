@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical PDF AI</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+</head>
+<body>
+
+<body>
+
+<!-- Sidebar Button -->
+<button id="menu-btn">></button>
+
+
+<!-- Sidebar -->
+<div id="sidebar"><br>
+
+    <h2>🏥 MediMind AI</h2>
+
+    <ul>
+        <li>🏠 Home</li>
+        <li>📄 Upload History</li>
+        <li>💬 Chat History</li>
+        <li>👤 Profile</li>
+        <li>⚙️ Settings</li>
+        <div class="main-content">
+    </ul>
+
+</div>
+
+<div class="container">
+
+    <div class="header">
+        <h1>🏥 MediMind AI</h1>
+        <p>AI-Powered Medical Document Assistant</p>
+        <p align="center" id="p2"> Upload a medical document and get AI-powered, context-aware answers.</p>
+    </div>
+
+
+
+ {% if message %}
+<p style="color: green; text-align: center;">
+    {{ message }}
+</p>
+{% endif %}
+
+    <!-- Chat Section -->
+    <div class="chat-box" id="bot-message">
+         </div>
+
+<div class="form-container">
+
+ <!-- Upload Section -->
+
+ <div class="upload-section">
+
+        <form action="/upload" method="POST" enctype="multipart/form-data">
+
+            <input
+                type="file"
+                name="pdf"
+                accept=".pdf"
+                required>
+
+            <button type="submit">
+                🩺 Scan Doc
+            </button> 
+            
+        </form>
+
+    </div>
+
+
+{% if answer %}
+<div class="answer-box" style="color:blue;">
+    {{ answer }}
+</div>
+{% endif %}
+
+
+<div class="ask-section">
+    <!-- Question Area -->
+
+    <form id="ask-form">
+
+        <div class="input-area">
+           
+            <input
+                id="question-input"
+                type="text"
+                name="question" 
+                placeholder="Ask a question from your uploaded PDF..."
+                required>
+            <button type="submit">
+                ✨
+            </button>
+            
+        </div>
+
+    </form>
+    </div>
+
+    </div>
+
+</div><!--main -container-close-->
+</div>
+<script>
+const form = document.getElementById("ask-form");
+const chatBox = document.getElementById("bot-message");
+form.addEventListener("submit", async function(e) {e.preventDefault();
+    let question = document.getElementById("question-input").value;
+    const userMessage = document.createElement("div");
+    userMessage.className = "user-message";
+    userMessage.innerText = question;
+    userMessage.classList.add("user-message");
+    chatBox.appendChild(userMessage);
+    let response = await fetch("/ask", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"},
+            body: "question=" + encodeURIComponent(question)
+        });
+        console.log("STATUS:", response.status);
+        console.log("1 fatched");
+        let data = await response.json();
+
+        console.log("2 . json parsed");
+        const aiMessage = document.createElement("div");
+        aiMessage.className = "bot-message";
+        aiMessage.innerText = data.answer;
+        // aiMessage.innerText=JSON.stringify(data.structured,null,2)
+        console.log(data.structured);
+        aiMessage.classList.add("ai-message");
+        chatBox.appendChild(aiMessage);
+        document.getElementById("question-input").value = "";
+        console.log(data);
+        console.log(data.answer);
+        chatBox.scrollTop = chatBox.scrollHeight;
+        
+        });
+
+const menuBtn = document.getElementById("menu-btn");
+const sidebar = document.getElementById("sidebar");
+const mainContent = document.querySelector(".main-content");
+
+
+menuBtn.addEventListener("click",()=>{
+
+    sidebar.classList.toggle("active");
+    mainContent.classList.toggle("shift");
+
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Register | MediMind AI</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+<div class="auth-container">
+
+    <div class="header">
+        <h1>🏥 MediMind AI</h1>
+        <p>Create Your Account</p>
+    </div>
+
+    <form class="auth-form" action="/register" method="POST">
+
+        <input
+            type="text"
+            name="name"
+            placeholder="Full Name"
+            required>
+
+        <input
+            type="email"
+            name="email"
+            placeholder="Email Address"
+            required>
+
+        <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            required>
+
+        <button type="submit">
+            Register
+        </button>
+
+    </form>
+
+    <p class="auth-link">
+        Already Registered?
+        <a href="/">Login</a>
+    </p>
+
+</div>
+
+</body>
+</html>
