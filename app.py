@@ -119,11 +119,16 @@ def upload_pdf():
         return "no file uploaded"
 
     pdf = request.files["pdf"]
-    if pdf:
+    if pdf and pdf.filename != "":    
+        
+        # CRUCIAL: Dynamically create the folder if Railway hasn't created it yet
+        if not os.path.exists(app.config["UPLOAD_FOLDER"]):
+            os.makedirs(app.config["UPLOAD_FOLDER"])
 
-        file_path = os.path.join(app.config["UPLOAD_FOLDER"],pdf.filename)        
+        # Safely join the path and save the file
+        file_path = os.path.join(app.config["UPLOAD_FOLDER"], pdf.filename)        
         pdf.save(file_path)
-        # print(file_path)
+        
         logging.info("1 upload started")
         text = read_pdf(file_path)
 
@@ -131,21 +136,19 @@ def upload_pdf():
         chunks = split_text(text)
         logging.info(" 3 chunks created")
 
-        print("Total chunks : ",len(chunks))
+        print("Total chunks : ", len(chunks))
         print(chunks[0])
     
         embeddings = get_embeddings(chunks)
 
         logging.info("4 embedding created")
-        create_index(embeddings,chunks)
+        create_index(embeddings, chunks)
 
         logging.info(" 5 fiass indx created")
 
-        return render_template(
-    "home.html",
-       message="✓"
-  
-)
+        return render_template("home.html", message="✓")
+        
+    return "Invalid file name", 400
 # @app.route("/ask",methods=["POST"])
 # def ask_question():
 #     print("ask route hit")
