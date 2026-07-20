@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import os
 
 load_dotenv()
-key = os.getenv("GROQ_API_KEY")
+key = os.getenv("GROQ_API")
 client = Groq(api_key=key)
 
 def generate_answer(context, question):
