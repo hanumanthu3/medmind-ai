@@ -121,9 +121,7 @@ def upload_pdf():
     pdf = request.files["pdf"]
     if pdf:
 
-        file_path = os.path.join(app.config["UPLOAD_FOLDER"],pdf.filename)
-        pdf.save(file_path)
-        # print(file_path)
+        file_path = os.path.join(app.config["UPLOAD_FOLDER"],pdf.filename)        # print(file_path)
         logging.info("1 upload started")
         text = read_pdf(file_path)
 
